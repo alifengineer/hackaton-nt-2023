@@ -1,9 +1,33 @@
-import React from 'react'
+import React from "react";
+import LogoImg from "../images/logo_pentagol.svg";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import { IconButton } from "@mui/material";
+import { useStore } from "../context/store";
+import { useStatics } from "../context/statics";
 
 const Header = () => {
-  return (
-    <div>Header</div>
-  )
-}
+  const { DARK, LIGHT } = useStatics();
+  const { theme, setTheme } = useStore();
 
-export default Header
+  return (
+    <div className="header">
+      <div className="header__content container">
+        <img src={LogoImg} alt="Pentagol" />
+        <IconButton
+          className={`header__btn ${theme}`}
+          sx={{ backgroundColor: "#fff" }}
+          onClick={() => setTheme(theme === LIGHT ? DARK : LIGHT)}
+        >
+          {theme === LIGHT ? (
+            <LightModeOutlinedIcon sx={{ fontSize: "20px" }} />
+          ) : (
+            <DarkModeOutlinedIcon sx={{ fontSize: "20px" }} />
+          )}
+        </IconButton>
+      </div>
+    </div>
+  );
+};
+
+export default Header;

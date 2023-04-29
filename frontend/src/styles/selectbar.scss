@@ -1,0 +1,27 @@
+.selectbar {
+  background-color: #dae9e0;
+  border-radius: 10px;
+}
+.leagues {
+  display: flex;
+  align-items: center;
+}
+.league {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+
+  width: 189px;
+  height: 50px;
+  border-radius: 10px;
+  transition: background-color 200ms;
+}
+.active__league {
+  background-color: $color-green;
+  color: $color-w;
+}

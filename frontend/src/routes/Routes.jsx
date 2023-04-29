@@ -1,12 +1,11 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Admin from '../pages/Admin';
-import User from '../pages/User';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "../pages/Home";
+
 export default function Routers() {
   return (
     <Routes>
-      <Route index element={<User />} />
-      <Route path='/admin' element={<Admin />} />
+      <Route index element={<Home />} />
     </Routes>
-  )
+  );
 }
