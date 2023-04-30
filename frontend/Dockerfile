@@ -1,5 +1,5 @@
 # we will use node:alpine docker image
-FROM node:14.16.0-alpine3.13 as build-stage
+FROM node:14.16.0-alpine3.13 as builder
 
 WORKDIR /web
 
@@ -12,3 +12,5 @@ RUN npm install
 COPY . /web
 
 RUN npm run build
+
+COPY --from=builder /web/build /usr/share/nginx/html
