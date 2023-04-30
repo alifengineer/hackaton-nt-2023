@@ -6,8 +6,22 @@ const StoreContext = createContext({});
 export const StoreProvider = ({ children }) => {
   const { DARK } = useStatics();
   const [theme, setTheme] = useState(DARK);
-  const [activeNextTour, setActiveNextTour] = useState(0);
-  const [activeTour, setActiveTour] = useState(0);
+  const [activeNextTour, setActiveNextTour] = useState({ tur: null, id: null });
+  const [activeTour, setActiveTour] = useState({ tur: null, id: null });
+  const [lastNewsPag, setLastNewsPag] = useState(0);
+  const [allNewsPag, setAllNewsPag] = useState(0);
+
+  const getTime = (time) => {
+    if (time) {
+      const date = new Date(time);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(date.getDate()).padStart(2, "0")}`;
+    } else {
+      return time;
+    }
+  };
 
   return (
     <StoreContext.Provider
@@ -18,6 +32,11 @@ export const StoreProvider = ({ children }) => {
         setActiveNextTour,
         activeTour,
         setActiveTour,
+        getTime,
+        setLastNewsPag,
+        lastNewsPag,
+        setAllNewsPag,
+        allNewsPag,
       }}
     >
       {children}
