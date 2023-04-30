@@ -38,14 +38,21 @@
 }
 .main__news--box {
   padding-bottom: 15px;
+  color: $color-b;
 
   &:not(:last-child) {
     border-bottom: 1px solid #d2d2d2;
   }
 }
 .main__news--heading {
+  color: $color-b;
   font-size: 12px;
 }
 .main__news--title {
+  color: $color-b;
   font-size: 20px;
+}
+.main__news--date {
+  color: $color-b;
+  font-size: 10px;
 }
