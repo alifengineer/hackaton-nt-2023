@@ -14,6 +14,7 @@ type ServiceI interface {
 		resp *models.GetNewsByIDResponse, err error)
 	GetAllNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error)
 	CreateNews(ctx context.Context, req *models.CreateNewsRequest) (resp *models.News, err error)
+	GetLatestNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error)
 }
 
 type Service struct {

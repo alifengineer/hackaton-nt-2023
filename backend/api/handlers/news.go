@@ -80,3 +80,32 @@ func (h *Handler) GetNewsByID(c *gin.Context) {
 
 	h.handleResponse(c, http.OK, resp)
 }
+
+func (h *Handler) GetLatestNews(c *gin.Context) {
+
+	var body models.GetAllNewRequest
+
+	limit, err := h.getLimitParam(c)
+	if err != nil {
+		h.handleResponse(c, http.BadRequest, err.Error())
+		return
+	}
+	body.Limit = limit
+	offset, err := h.getOffsetParam(c)
+	if err != nil {
+		h.handleResponse(c, http.BadRequest, err.Error())
+		return
+	}
+	body.Offset = offset
+	resp, err := h.services.NewsService().GetLatestNews(
+		c.Request.Context(),
+		&body,
+	)
+
+	if err != nil {
+		h.handleResponse(c, http.InternalServerError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http.OK, resp)
+}

@@ -36,3 +36,13 @@ func (s *Service) GetNewsByID(ctx context.Context, req *models.GetNewsByIDReques
 
 	return
 }
+
+func (s *Service) GetLatestNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error) {
+
+	resp, err = s.strg.News().GetLatesNews(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}

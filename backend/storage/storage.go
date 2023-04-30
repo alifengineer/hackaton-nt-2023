@@ -43,6 +43,7 @@ type MatchRepoI interface {
 	GetAllMatch(ctx context.Context, req *models.GetAllMatchRequest) (resp *models.GetAllMatchResponse, err error)
 	GetMatchByID(ctx context.Context, req *models.GetMatchByIDRequest) (
 		resp *models.GetMatchByIDResponse, err error)
+		
 }
 
 type TeamRepoI interface {
@@ -56,6 +57,8 @@ type LeagueRepoI interface {
 	GetLeagueByID(ctx context.Context, req *models.GetLeagueByIDRequest) (resp *models.GetLeagueByIDResponse, err error)
 	GetAllLeagues(ctx context.Context) ([]*models.League, error)
 	GetTopTeamsInLeague(ctx context.Context, req *models.GetTopTeamsInLeagueRequest) (resp *models.GetTopTeamsInLeagueResponse, err error)
+	GetLeagueSeasonTeams(ctx context.Context, req *models.GetLeagueSeasonTeamsRequest) (resp *models.GetLeagueSeasonTeamsResponse, err error)
+	CreateLeagueSeasonTeams(ctx context.Context, req *models.CreateLeagueSeasonTeamsRequest) (err error)
 }
 
 type SeasonRepoI interface {
@@ -69,4 +72,5 @@ type NewsRepoI interface {
 		resp *models.GetNewsByIDResponse, err error)
 	GetAllNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error)
 	CreateNews(ctx context.Context, req *models.CreateNewsRequest) (resp *models.News, err error)
+	GetLatesNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error)
 }

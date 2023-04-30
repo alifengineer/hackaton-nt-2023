@@ -13,3 +13,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 
 CREATE UNIQUE INDEX "users_phone_deleted_at_unique" ON "users" ("email", "deleted_at");
+
+INSERT INTO "users"("first_name", "last_name", "email","password")
+VALUES ('Tolib', 'Dilmurodov', 'tolibdilmurodov98@gmail.com', '$argon2id$v=19$models=65536,t=3,p=4$335KxmjmC5iB3YrgWBJ4Gw$dNTUoBZezp9zTTF29jGQ4gDMgEx5k+klCaiVkmTEoEo');
+-- tolib2003

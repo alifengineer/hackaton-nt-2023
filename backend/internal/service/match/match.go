@@ -3,6 +3,7 @@ package match
 import (
 	"context"
 
+	"github.com/dilmurodov/xakaton_nt/pkg/logger"
 	"github.com/dilmurodov/xakaton_nt/pkg/models"
 )
 
@@ -104,4 +105,25 @@ func (s *Service) GetAllSeasons(ctx context.Context, req *models.GetAllSeasonsRe
 	}
 
 	return
+}
+
+func (s *Service) GetLeagueSeasonTeams(ctx context.Context, req *models.GetLeagueSeasonTeamsRequest) (resp *models.GetLeagueSeasonTeamsResponse, err error) {
+
+	resp, err = s.strg.League().GetLeagueSeasonTeams(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+func (s *Service) CreateLeagueSeasonTeams(ctx context.Context, req *models.CreateLeagueSeasonTeamsRequest) (err error) {
+	s.log.Info("CreateLeagueSeasonTeams", logger.Any("req", req))
+
+	err = s.strg.League().CreateLeagueSeasonTeams(ctx, req)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
