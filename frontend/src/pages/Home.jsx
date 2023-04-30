@@ -30,6 +30,7 @@ const User = () => {
     };
     getData();
   }, []);
+
   return (
     <>
       <Header />
