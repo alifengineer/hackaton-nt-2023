@@ -48,17 +48,14 @@ const NewsForm = () => {
   };
 
   return (
-    <div
-      className="news_form"
-      style={{ marginLeft: "30px", marginTop: "50px" }}
-    >
-      <form onSubmit={handleFormSubmit} className="needs-validation" novalidate>
-        <div class="mb-3">
-          <label htmlFor="exampleFormControlTextarea1" class="form-label">
+    <div className="news_form">
+      <form onSubmit={handleFormSubmit} className="needs-validation">
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">
             News title
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             placeholder="Title"
             aria-label="title"
@@ -66,23 +63,23 @@ const NewsForm = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <div class="mb-3">
-          <label htmlFor="exampleFormControlTextarea1" class="form-label">
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Example textarea
           </label>
           <textarea
             onChange={(e) => setText(e.target.value)}
-            class="form-control"
+            className="form-control"
             id="exampleFormControlTextarea1"
             rows="3"
           ></textarea>
         </div>
-        <div class="mb-3">
-          <label htmlFor="formFile" class="form-label">
+        <div className="mb-3">
+          <label htmlFor="formFile" className="form-label">
             Image
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="file"
             accept="image/*"
             id="formFile"
@@ -90,7 +87,7 @@ const NewsForm = () => {
             required={true}
           />
         </div>
-        <button type="submit" class="btn btn-success">
+        <button type="submit" className="btn btn-success">
           Save
         </button>
       </form>

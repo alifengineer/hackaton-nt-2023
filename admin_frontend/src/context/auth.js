@@ -9,29 +9,29 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
   const [formError, setFormError] = useState("");
   const [redirect, setRedirect] = useState("/");
 
-  useEffect(() => {
-    async function loadUserFromCookies() {
-      const token = Cookies.get("token");
-      if (token) {
-        authAxios.defaults.headers.Authorization = `Bearer ${token}`;
-        try {
-          setUser(true);
-        } catch (err) {
-          setUser(false);
-          Cookies.remove("token");
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    }
+  // useEffect(() => {
+  //   async function loadUserFromCookies() {
+  //     const token = Cookies.get("token");
+  //     if (token) {
+  //       authAxios.defaults.headers.Authorization = `Bearer ${token}`;
+  //       try {
+  //         setUser(true);
+  //       } catch (err) {
+  //         setUser(false);
+  //         Cookies.remove("token");
+  //       }
+  //     } else {
+  //       setUser(null);
+  //     }
+  //     setLoading(false);
+  //   }
 
-    loadUserFromCookies();
-  }, []);
+  //   loadUserFromCookies();
+  // }, []);
 
   const login = async () => {};
 
