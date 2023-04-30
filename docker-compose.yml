@@ -2,8 +2,8 @@ version: '3'
 
 services:
   app:
-    build: .
-    container_name: xakaton-nt-api
+    build: ./backend
+    container_name: hackaton-nt-api
     restart: always
     volumes:
       - ./backend:/app
@@ -22,7 +22,7 @@ services:
         condition: service_healthy
   web:
     image: nginx
-    container_name: xakaton-nt-web
+    container_name: hackaton-nt-web
     restart: always
     ports:
       - "80:80"
@@ -33,11 +33,11 @@ services:
       - db
   db:
     image: postgres
-    container_name: xakaton-nt-db
+    container_name: hackaton-nt-db
     expose:
       - "5432"
     volumes:
-      - /var/lib/postgresql/xakaton-nt:/var/lib/postgresql/data
+      - /var/lib/postgresql/hackaton-nt:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -50,13 +50,13 @@ services:
       retries: 10
   migrate-post:
     image: migrate/migrate
-    container_name: xakaton-nt-migrate
+    container_name: hackaton-nt-migrate
     command:
       [
         "-path",
         "/migrations",
         "-database",
-        "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@xakaton-nt-db:5432/${POSTGRES_DATABASE}?sslmode=disable",
+        "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@hackaton-nt-db:5432/${POSTGRES_DATABASE}?sslmode=disable",
         "up"
       ]
     depends_on:
@@ -65,17 +65,17 @@ services:
     volumes:
       - ./backend/migrations:/migrations
   frontend:
-    image: node:12.16.1-alpine
-    container_name: xakaton-nt-frontend
-    command: npm run serve
+    build: ./frontend
+    container_name: hackaton-nt-frontend
+    working_dir: /web
     ports:
-      - "8080:8080"
-    volumes:
-      - ./frontend:/app
+      - "3001:3000"
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API}
     depends_on:
       - app
-    environment:
-      VUE_APP_API_URL: http://app:3000
+      - db
+ 
 volumes:
   db:
   migrations:
