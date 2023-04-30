@@ -12,7 +12,7 @@ export const simpleAxios = axios.create({
 });
 
 export const authAxios = axios.create({
-  baseURL: `https://${process.env.API}`,
+  baseURL: `https://${process.env.REACT_APP_API}`,
   headers: {
     Accept: "application/json",
   },
