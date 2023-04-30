@@ -53,8 +53,8 @@ func (s *matchRepo) GetMatchesByTURStatus(ctx context.Context, req *models.GetMa
 		at.team_name,
 		at.image,
 		CASE
-			WHEN m.home_score > m.away_score THEN ht.id
-			WHEN m.home_score < m.away_score THEN at.id
+			WHEN m.home_score > m.away_score THEN 'home_team'
+			WHEN m.home_score < m.away_score THEN 'away_team'
 			ELSE NULL
 		END AS winner
 	FROM matches m
@@ -175,7 +175,7 @@ func (s *matchRepo) CreateMatch(ctx context.Context, req *models.Match) (resp *m
 		tur, 
 		m_date
 	)
-	VALUES ($1, $2, $3, $4, $5)
+	VALUES ($1, $2, $3, $4, $5, $6)
 	RETURNING id, home_team_id, away_team_id, m_date, tur, league_id, season_id`
 
 	err = tx.QueryRowContext(ctx, query,

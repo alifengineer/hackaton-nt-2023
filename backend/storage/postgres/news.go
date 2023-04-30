@@ -68,6 +68,50 @@ func (n *newsRepo) GetAllNews(ctx context.Context, req *models.GetAllNewRequest)
 			created_at,
 			COUNT(1) FILTER (WHERE deleted_at IS NULL) OVER () AS total_count
 		FROM news
+		ORDER BY created_at DESC
+		LIMIT $1 OFFSET $2`
+	rows, err := n.db.QueryContext(ctx, query,
+		req.Limit,
+		req.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var r models.News
+		err = rows.Scan(
+			&r.ID,
+			&r.Title,
+			&r.Content,
+			&r.Image,
+			&r.CreatedAt,
+			&resp.TotalCount,
+		)
+		if err != nil {
+			return nil, err
+		}
+		resp.NewsList = append(resp.NewsList, &r)
+	}
+	return resp, err
+}
+
+func (n *newsRepo) GetLatesNews(ctx context.Context, req *models.GetAllNewRequest) (resp *models.GetAllNewsResponse, err error) {
+
+	resp = &models.GetAllNewsResponse{
+		TotalCount: 0,
+		NewsList:   []*models.News{},
+	}
+	query := `
+		SELECT
+			id,
+			title,
+			content,
+			image,
+			created_at,
+			COUNT(1) FILTER (WHERE deleted_at IS NULL) OVER () AS total_count
+		FROM news
+		WHERE deleted_at IS NULL AND created_at > NOW() - INTERVAL '5 hour'
 		LIMIT $1 OFFSET $2`
 	rows, err := n.db.QueryContext(ctx, query,
 		req.Limit,

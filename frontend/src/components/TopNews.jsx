@@ -1,6 +1,8 @@
 import React from "react";
 import { useStore } from "../context/store";
 import { Link } from "react-router-dom";
+import defImg from "../images/defimg.jpg";
+
 const TopNews = ({ topnews }) => {
   const { getTime } = useStore();
   return (
@@ -12,7 +14,7 @@ const TopNews = ({ topnews }) => {
             key={index + 1}
           >
             <Link to={`/news?id=${obj.id}`}>
-              <img src={obj.image} alt={obj.title} />
+              <img src={obj.image || defImg} alt={obj.title} />
               <div className="topnews__content">
                 <h2>{obj.title}</h2>
                 <p className="mt_10">{getTime(obj.created_at)}</p>

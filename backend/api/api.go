@@ -42,14 +42,6 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 				auth.POST("/register", h.RegisterHandler)
 			}
 
-			// sms := v1.Group("/sms")
-			// {
-			// 	// отправка смс
-			// 	sms.POST("/send", h.SendSmsOTPHandler)
-			// 	// проверка смс
-			// 	sms.POST("/check", h.VerifySmsOTPHandler)
-			// }
-
 			email := v1.Group("/email")
 			{
 				// отправка email
@@ -63,6 +55,8 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 				liga.POST("/top_teams", h.GetTopTeamsInLeague)
 				liga.GET("/:id", h.GetLeagueByID)
 				liga.GET("/:id/seasons", h.GetAllSeasons)
+				liga.GET("/:id/seasons/:season_id/teams", h.GetLeagueSeasonTeams)
+				liga.POST("/:id/seasons/:season_id/teams", h.CreateLeagueSeasonTeams)
 			}
 			match := v1.Group("/match")
 			{
@@ -77,17 +71,13 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 				news.GET("/", h.GetAllNews)
 				news.GET("/:id", h.GetNewsByID)
 				news.POST("/", h.CreateNews)
-				// news.PUT("/:id", h.UpdateNews)
-				// news.DELETE("/:id", h.DeleteNews)
+				news.GET("/latest", h.GetLatestNews)
 			}
 
 			team := v1.Group("/team")
 			{
 				team.GET("/", h.GetAllTeams)
 				team.GET("/:id", h.GetTeamByID)
-				// team.POST("/", h.CreateTeam)
-				// team.PUT("/:id", h.UpdateTeam)
-				// team.DELETE("/:id", h.DeleteTeam)
 			}
 		}
 	}

@@ -3,10 +3,14 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"strings"
+	"time"
 
+	"github.com/dilmurodov/xakaton_nt/pkg/helper"
 	"github.com/dilmurodov/xakaton_nt/pkg/models"
 	"github.com/dilmurodov/xakaton_nt/storage"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 )
 
 type leagueRepo struct {
@@ -330,4 +334,105 @@ func (s *leagueRepo) GetTURByLeagueID(ctx context.Context, req *models.GetTURByL
 	}
 
 	return resp, err
+}
+
+func (s *leagueRepo) GetLeagueSeasonTeams(ctx context.Context, req *models.GetLeagueSeasonTeamsRequest) (resp *models.GetLeagueSeasonTeamsResponse, err error) {
+	resp = &models.GetLeagueSeasonTeamsResponse{
+		Teams: []*models.Team{},
+	}
+	query := `
+		SELECT
+			tls.id,
+			tls.league_id,
+			tls.season_id,
+			t.id AS team_id,
+			t.team_name AS team_name,
+			t.image AS team_image
+		FROM team_league_season tls
+		INNER JOIN team t ON t.id = tls.team_id
+		WHERE tls.league_id = $1 AND tls.season_id = $2
+	`
+
+	rows, err := s.db.QueryContext(ctx, query, req.LeagueID, req.SeasonID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return resp, nil
+		} else {
+			return nil, err
+		}
+	}
+
+	defer rows.Close()
+
+	var (
+		rID       sql.NullString
+		rLeagueID sql.NullString
+		rSeasonID sql.NullString
+		rTeamID   sql.NullString
+		rTeamName sql.NullString
+		rTeamImg  sql.NullString
+	)
+
+	for rows.Next() {
+		var r models.Team
+		if err := rows.Scan(
+			&rID,
+			&rLeagueID,
+			&rSeasonID,
+			&rTeamID,
+			&rTeamName,
+			&rTeamImg,
+		); err != nil {
+			return nil, err
+		}
+		r.ID = rTeamID.String
+		r.Name = rTeamName.String
+		r.Image = rTeamImg.String
+		resp.Teams = append(resp.Teams, &r)
+	}
+
+	return resp, err
+}
+
+func (s *leagueRepo) CreateLeagueSeasonTeams(ctx context.Context, req *models.CreateLeagueSeasonTeamsRequest) (err error) {
+
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	if _, err := uuid.Parse(req.SeasonID); err != nil {
+		season, err := createSeason(tx, ctx, &models.Season{
+			SeasonFrom: time.Now().Year(),
+			SeasonTo:   time.Now().Year() + 1,
+			LeagueID:   req.LeagueID,
+		})
+		if err != nil {
+			return err
+		}
+		req.SeasonID = season.ID
+	}
+
+	query := `
+		INSERT INTO team_league_season (
+			league_id, 
+			season_id, 
+			team_id
+		) VALUES `
+
+	var values []interface{}
+
+	for _, team := range req.Teams {
+		query += ` (?, ?, ?),`
+		values = append(values, req.LeagueID, req.SeasonID, team.ID)
+	}
+
+	query = strings.TrimSuffix(query, ",")
+	query = helper.ReplaceSQL(query, "?")
+
+	if _, err := tx.ExecContext(ctx, query, values...); err != nil {
+		return errors.Wrap(err, "error while inserting team_league_season")
+	}
+
+	return err
 }

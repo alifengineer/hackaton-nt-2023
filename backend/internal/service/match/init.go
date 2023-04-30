@@ -18,8 +18,10 @@ type ServiceI interface {
 	GetMatchByID(ctx context.Context, req *models.GetMatchByIDRequest) (resp *models.GetMatchByIDResponse, err error)
 	GetLeagueByID(ctx context.Context, req *models.GetLeagueByIDRequest) (resp *models.GetLeagueByIDResponse, err error)
 	GetAllTeams(ctx context.Context, req *models.GetAllTeamsRequest) (resp *models.GetAllTeamsResponse, err error)
-	GetTeamByID(ctx context.Context, req *models.GetTeamByIDRequest) (resp *models.Team, err error) 
+	GetTeamByID(ctx context.Context, req *models.GetTeamByIDRequest) (resp *models.Team, err error)
 	GetAllSeasons(ctx context.Context, req *models.GetAllSeasonsRequest) (resp []*models.Season, err error)
+	CreateLeagueSeasonTeams(ctx context.Context, req *models.CreateLeagueSeasonTeamsRequest) (err error)
+	GetLeagueSeasonTeams(ctx context.Context, req *models.GetLeagueSeasonTeamsRequest) (resp *models.GetLeagueSeasonTeamsResponse, err error)
 }
 
 type Service struct {
