@@ -20,7 +20,7 @@ func NewNewsRepo(db *sql.DB) storage.NewsRepoI {
 }
 
 func (n *newsRepo) CreateNews(ctx context.Context, req *models.CreateNewsRequest) (resp *models.News, err error) {
-
+	resp = &models.News{}
 	id := uuid.NewString()
 
 	query := `
@@ -47,7 +47,6 @@ func (n *newsRepo) CreateNews(ctx context.Context, req *models.CreateNewsRequest
 		&resp.CreatedAt,
 	)
 	if err != nil {
-
 		return nil, err
 	}
 	return resp, err
@@ -112,6 +111,7 @@ func (n *newsRepo) GetLatesNews(ctx context.Context, req *models.GetAllNewReques
 			COUNT(1) FILTER (WHERE deleted_at IS NULL) OVER () AS total_count
 		FROM news
 		WHERE deleted_at IS NULL AND created_at > NOW() - INTERVAL '5 hour'
+		ORDER BY created_at DESC
 		LIMIT $1 OFFSET $2`
 	rows, err := n.db.QueryContext(ctx, query,
 		req.Limit,

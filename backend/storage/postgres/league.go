@@ -183,7 +183,6 @@ func (s *leagueRepo) GetTopTeamsInLeague(ctx context.Context, req *models.GetTop
 			FROM team t
 			LEFT JOIN match m ON m.home_team_id = t.id OR m.away_team_id = t.id
 			WHERE t.id IN (SELECT team_id FROM league_teams)
-			AND m.status = 'finished'
 			GROUP BY t.id
 		),
 		-- every league teams's score
@@ -224,7 +223,6 @@ func (s *leagueRepo) GetTopTeamsInLeague(ctx context.Context, req *models.GetTop
 			FROM team t
 			LEFT JOIN match m ON m.home_team_id = t.id OR m.away_team_id = t.id
 			WHERE t.id IN (SELECT team_id FROM league_teams)
-			AND m.status = 'finished'
 			GROUP BY t.id
 		)
 		SELECT
