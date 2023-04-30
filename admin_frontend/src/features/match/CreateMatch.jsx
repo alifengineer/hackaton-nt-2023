@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { MatchForm } from "./components";
 import axios from "../../utils/axios";
+import toast from "react-hot-toast";
 
 const CreateMatch = () => {
   const form = useForm();
@@ -15,8 +16,12 @@ const CreateMatch = () => {
       m_date: formData.matchDate,
       tur: formData.tur,
     };
-
-    await axios.post("/admin-api/v1/match/", payload);
+    const res = await axios.post("/admin-api/v1/match/", payload);
+    if (res.status === 200 || res.status === 201) {
+      toast.success("Match created");
+    } else {
+      toast.error("System Error");
+    }
   };
 
   return (

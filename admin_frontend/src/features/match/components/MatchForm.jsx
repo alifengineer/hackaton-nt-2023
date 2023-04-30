@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import SelectTeam from "./SelectTeam";
 import SelectLeague from "./SelectLeague";
-import axios from "../../../utils/axios";
+import axios, { authAxios } from "../../../utils/axios";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import DatePicker from "react-datepicker";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const MatchForm = () => {
   const [teams, setTeams] = useState([]);
   const [leagues, setLeagues] = useState([]);
   const [league, setLeague] = useState(null);
+  const navigate = useNavigate();
 
   const [turs, setTurs] = useState([]);
   const form = useFormContext();
@@ -20,10 +23,22 @@ const MatchForm = () => {
 
   useEffect(() => {
     const getAllLeagues = async () => {
-      const {
-        data: { data },
-      } = await axios.get("admin-api/v1/league/");
-      setLeagues(data);
+      const token = Cookies.get("token");
+      if (token) {
+        axios.defaults.headers.Authorization = `Bearer ${token}`;
+        authAxios.defaults.headers.Authorization = `Bearer ${token}`;
+      }
+
+      try {
+        const {
+          data: { data },
+        } = await axios.get("admin-api/v1/league/");
+        setLeagues(data);
+      } catch (error) {
+        if (error.response.status === 403) {
+          navigate("/login");
+        }
+      }
     };
 
     getAllLeagues();
