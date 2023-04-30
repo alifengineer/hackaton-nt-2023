@@ -21,6 +21,11 @@
   border-radius: 10px;
   transition: background-color 200ms;
 }
+.league img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
 .active__league {
   background-color: $color-green;
   color: $color-w;

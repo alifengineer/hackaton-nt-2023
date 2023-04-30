@@ -5,6 +5,7 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import { IconButton } from "@mui/material";
 import { useStore } from "../context/store";
 import { useStatics } from "../context/statics";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { DARK, LIGHT } = useStatics();
@@ -13,7 +14,9 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header__content container">
-        <img src={LogoImg} alt="Pentagol" />
+        <Link to="/">
+          <img src={LogoImg} alt="Pentagol" />
+        </Link>
         <IconButton
           className={`header__btn ${theme}`}
           sx={{ backgroundColor: "#fff" }}
