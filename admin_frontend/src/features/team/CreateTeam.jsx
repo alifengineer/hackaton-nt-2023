@@ -1,31 +1,31 @@
 import React from 'react';
-import {Form} from "react-bootstrap";
 import {FormProvider, useForm} from "react-hook-form";
-import {MatchForm} from "./components";
 import axios from "../../utils/axios";
+import {Form} from "react-bootstrap";
+import {TeamForm} from "./components";
 
-const CreateMatch = () => {
+const CreateTeam = () => {
     const form = useForm();
 
     const onSubmit = async (formData) => {
+        const teams = [];
+        teams.push({id: formData.teamId});
         const payload = {
-            home_team_id: formData.homeTeamId,
-            away_team_id: formData.awayTeamId,
+            teams: teams,
             league_id: formData.leagueId,
-            m_date: formData.matchDate,
-            tur: formData.tur
+            season_id: formData.seasonId
         }
 
-        await axios.post("/api/v1/match/", payload);
+        await axios.post(`/api/v1/league/${formData.leagueId}/seasons/${formData.seasonId}/teams`, payload);
     }
 
     return (
         <FormProvider {...form}>
             <Form onSubmit={form.handleSubmit(onSubmit)}>
-                <MatchForm />
+                <TeamForm />
             </Form>
         </FormProvider>
     );
 };
 
-export default CreateMatch;
+export default CreateTeam;
