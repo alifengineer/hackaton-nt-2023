@@ -3,7 +3,7 @@ import React from "react";
 const TopNews = ({ topnews }) => {
   return (
     <div className="topnews">
-      {topnews.map((obj, index) => {
+      {topnews?.map((obj, index) => {
         return (
           <div
             className={`topnews__box topnews__box--${index + 1}`}

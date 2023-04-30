@@ -27,6 +27,7 @@
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: $color-b;
 }
 .news__text {
   font-weight: 500;
@@ -36,11 +37,12 @@
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1em;
-  height: 2em;
+  line-height: 1.5em;
+  height: 3em;
 
   color: $color-gray-dark;
 }
 .news__date {
   font-size: 12px;
+  color: $color-gray-dark;
 }

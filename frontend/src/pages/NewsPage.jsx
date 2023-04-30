@@ -1,43 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Header, Footer, News, Heading } from "../components";
 import newsImg from "../images/news_img.png";
 import bigImg from "../images/big_img.png";
+import { useLocation } from "react-router-dom";
+import axios from "../utils/axios";
+import { useStore } from "../context/store";
 
 const NewsPage = () => {
+  const { getTime } = useStore();
+  const [lastNews, setLastNews] = useState([]);
+  const [info, setInfo] = useState(null);
+  const [news, setNews] = useState([]);
+  const [mainNews, setMainNews] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    console.log(id);
+    const getData = async () => {
+      const res = await axios.get(`/api/v1/news/${id}`);
+      console.log(res.data.data.news);
+      setInfo(res.data.data.news);
+    };
+    getData();
+  }, [id]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await axios.get(`/api/v1/news/?limit=8&offset=0`);
+      setNews(data.data.data.news_list);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await axios.get(`/api/v1/news/?limit=4&offset=0`, {
+        is_importtant: true,
+      });
+      console.log(data.data.data.news_list);
+      setMainNews(data.data.data.news_list);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await axios.get(`/api/v1/news/latest?limit=4&offset=0`);
+      setLastNews(data?.data.data.news_list);
+    };
+    getData();
+  }, []);
+
   return (
     <>
       <Header />
 
       <div className="container mt_30">
         <div className="newspage__head">
-          <p className="newspage__date">{data.date}</p>
-          <h3 className="newspage__title mt_7">{data.title}</h3>
+          <p className="newspage__date">{getTime(info?.created_at)}</p>
+          <h3 className="newspage__title mt_7">{info?.title}</h3>
         </div>
 
         <div className="newspage__main mt_20">
           <div className="newspage__content">
-            <img src={data.image} alt="news" />
-            <p className="newspage__text mt_20">{data.content}</p>
+            <img src={info?.image} alt="news" />
+            <p className="newspage__text mt_20">{info?.content}</p>
           </div>
           <div className="newspage__aside">
             <div className="main__news">
               <h2 className="main__news--title">Asosiy</h2>
-              {main_news.map((obj, index) => {
+              {mainNews?.map((obj, index) => {
                 return (
                   <div className="main__news--box mt_20" key={index + 1}>
-                    <h3 className="main__news--heading">{obj.title}</h3>
-                    <p className="main__news--date mt_7">{obj.date}</p>
+                    <h3 className="main__news--heading">{obj?.title}</h3>
+                    <p className="main__news--date mt_7">
+                      {getTime(obj?.created_at)}
+                    </p>
                   </div>
                 );
               })}
             </div>
             <div className="main__news mt_20">
-              <h2 className="main__news--title">Asosiy</h2>
-              {main_news.map((obj, index) => {
+              <h2 className="main__news--title">So'ngi</h2>
+              {lastNews?.map((obj, index) => {
                 return (
                   <div className="main__news--box mt_20" key={index + 1}>
                     <h3 className="main__news--heading">{obj.title}</h3>
-                    <p className="main__news--date mt_7">{obj.date}</p>
+                    <p className="main__news--date mt_7">
+                      {getTime(obj.created_at)}
+                    </p>
                   </div>
                 );
               })}
@@ -59,80 +112,6 @@ const NewsPage = () => {
 
 export default NewsPage;
 
-const news = [
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-  {
-    id: "uuid",
-    title: "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi",
-    content:
-      "Zidan Manchester Yunayted ga Premer-ligaga tayyor emasligini aytdi ",
-    date: "2020-10-10",
-    image: newsImg,
-  },
-];
 const main_news = [
   {
     id: "uuid",
@@ -167,13 +146,3 @@ const main_news = [
     image: newsImg,
   },
 ];
-
-const data = {
-  id: "uuid",
-  title:
-    "Faqatgina muvaffaqiyatli qur'a Rossiyani Jahon chempionatiga olib boradi: bo'g'inlar oldidagi barcha maketlar",
-  content:
-    "Ilon Mask (Elon Mask, Tesla va boshqa loyihalar rahbari) bir yarim hafta ichida ikkinchi marta Xitoyning hukmron doiralari va fuqarolariga murojaat qildi. Videoda u ularni ushbu mamlakatda biznesni rivojlantirish va kengaytirishga sarmoya kiritishga tayyor ekanligiga ishontirdi. Qayta ishlangan ma'lumotlarning xavfsizligiga alohida e'tibor qaratiladi Ular faqat Xitoyning o'zida saqlanadi va shuning uchun istalgan vaqtda Orta Qirollik hukumati foydalanishi mumkin boladi.Ilon Mask Xitoyda hafta oxirida bo‘lib o‘tgan Butunjahon internet konferensiyasining tomoshabinlariga videomurojaati chog‘ida yangi bayonotlar berdi. Kompaniya Cisco Systems (Chak Robbins), Intel (Pat Gelsinger) va Qualcomm (Kristiano Amon) rahbarlaridan tashkil topgan bo'lib, Xitoy Xalq Respublikasi biznesi manfaatlarini Alibaba va Xiaomi rahbarlari himoya qilishgan.Tadbirni Xitoy Xalq Respublikasi Davlat kengashi bosh vaziri o‘rinbosari Lyu Xe ochib berdi va Si Szinpinning Osmon imperiyasining shaffof raqamli iqtisodiyotni yaratish uchun barcha kuchlar bilan ishlash istagi haqidagi so‘zlarini keltirdi.Yaqin kelajakda Tesla nafaqat Shanxay filialida elektromobillar ishlab chiqarishni kengaytiribgina qolmay, balki mahalliy studiya yordamida elektromobilning arzon modelini (narxi 25 000 dollardan kam) ishlab chiqmoqchi.Xitoy Xalq Respublikasida yig‘ilgan Tesla Model Y va Model 3 elektromobillari allaqachon Yevropaga eksport qilinmoqda.",
-  image: bigImg,
-  date: "2020-10-10",
-};
