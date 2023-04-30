@@ -1,22 +1,17 @@
 import React from "react";
-import { useStore } from "../context/store";
 
-const SelectBar = ({ leagues }) => {
-  const { activeNextTour, setActiveNextTour } = useStore();
-
+const SelectBar = ({ leagues, activeId, handleActiveId }) => {
   return (
     <div className="selectbar mt_30">
       <div className="leagues">
-        {leagues?.map((league) => {
+        {leagues?.map((league, index) => {
           return (
             <div
-              className={`league ${
-                activeNextTour === league.id && "active__league"
-              }`}
-              key={league.id}
-              onClick={() => setActiveNextTour(league.id)}
+              className={`league ${activeId === index && "active__league"}`}
+              key={index}
+              onClick={() => handleActiveId(index)}
             >
-              <img src={league.img} alt={leagues.name} />
+              <img src={league.image} alt={leagues.name} />
               <p>{league.name}</p>
             </div>
           );

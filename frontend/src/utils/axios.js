@@ -1,14 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: `https://${process.env.API}`,
-  headers: {
-    Accept: "application/json",
-  },
-});
-
-export const authAxios = axios.create({
-  baseURL: `https://${process.env.API}`,
+  baseURL: `http://localhost:8080`,
   headers: {
     Accept: "application/json",
   },
