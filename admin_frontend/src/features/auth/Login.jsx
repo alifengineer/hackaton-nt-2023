@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import axios from "../../utils/axios";
+import axios, {authAxios, simpleAxios} from "../../utils/axios";
+import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,16 +10,32 @@ const Login = () => {
   const [smsId, setSmsId] = useState(null);
   const [OTP, setOTP] = useState("");
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        await axios.post(`api/v1/email/verify-email/${smsId}/${OTP}`)
-        await axios.post("api/v1/auth/login", {
+        await authAxios.post(`api/v1/email/verify-email/${smsId}/${OTP}`)
+        const {data: {data: {access_token}}} = await authAxios.post("api/v1/auth/login", {
             email: email,
             password: password
         })
 
+        Cookies.set("token", access_token);
+        simpleAxios.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${access_token}`
+            return config;
+        })
+        axios.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${access_token}`
+            return config;
+        })
+        authAxios.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${access_token}`
+            return config;
+        })
+
+        navigate("/");
         toast.success("Успешно авторизован");
     } catch (error) {
         toast.error("Ошибка при авторизации")
@@ -27,7 +45,7 @@ const Login = () => {
 
   const updateStep = async () => {
       try {
-          const {data: {data: {sms_id}}} = await axios.post("api/v1/email/send-otp", {
+          const {data: {data: {sms_id}}} = await authAxios.post("api/v1/email/send-otp", {
               email: email
           });
           setSmsId(sms_id);
