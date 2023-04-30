@@ -15,7 +15,6 @@ RUN npm run build
 
 # Stage 2
 
-
 FROM nginx
 EXPOSE 3000
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
