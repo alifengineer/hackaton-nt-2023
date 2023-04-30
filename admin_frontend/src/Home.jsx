@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import NewsForm from "./components/NewsForm";
 import { CreateMatch } from "./features/match";
+import { CreateTeam } from "./features/team";
 
-const menus = ["Match", "News"];
+const menus = ["Match", "News", "Team"];
 
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState(menus[0]);
@@ -14,6 +15,7 @@ const Home = () => {
       <div style={{ padding: "40px" }}>
         {activeMenu === "News" && <NewsForm />}
         {activeMenu === "Match" && <CreateMatch />}
+        {activeMenu === "Team" && <CreateTeam />}
       </div>
     </div>
   );
