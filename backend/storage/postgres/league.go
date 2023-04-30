@@ -400,6 +400,13 @@ func (s *leagueRepo) CreateLeagueSeasonTeams(ctx context.Context, req *models.Cr
 	if err != nil {
 		return err
 	}
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+			return
+		}
+		_ = tx.Commit()
+	}()
 
 	if _, err := uuid.Parse(req.SeasonID); err != nil {
 		season, err := createSeason(tx, ctx, &models.Season{

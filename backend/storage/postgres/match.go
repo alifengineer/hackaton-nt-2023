@@ -138,6 +138,13 @@ func (s *matchRepo) CreateMatch(ctx context.Context, req *models.Match) (resp *m
 	if err != nil {
 		return nil, err
 	}
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+			return
+		}
+		_ = tx.Commit()
+	}()
 
 	query := `
 		SELECT

@@ -26,6 +26,13 @@ func (s *seasonRepo) CreateSeason(ctx context.Context, req *models.Season) (resp
 	if err != nil {
 		return nil, err
 	}
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+			return
+		}
+		_ = tx.Commit()
+	}()
 
 	query := `
 		INSERT INTO season(

@@ -88,14 +88,14 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 		v1 := adminApi.Group("/v1")
 		{
 
-			email := r.Group("/email")
+			email := v1.Group("/email")
 			{
 				// отправка email
 				email.POST("/send-otp", h.SendCodeToEmail)
 				// проверка email
 				email.POST("/verify-email/:sms_id/:otp", h.VerifyEmailOtpHandler)
 			}
-			auth := r.Group("/auth")
+			auth := v1.Group("/auth")
 			{
 				// авторизация
 				auth.POST("/login", h.LoginHandler)
