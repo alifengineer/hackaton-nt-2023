@@ -39,7 +39,7 @@ const User = () => {
 
   useEffect(() => {
     const getLeagues = async () => {
-      const data = await axios.get(`/api/v1/league/`);
+      const data = await axios.get(`/user-api/v1/league/`);
       setLeagues(data?.data.data);
       const obj = data?.data?.data[0];
 
@@ -50,7 +50,10 @@ const User = () => {
       setActiveTour({ id: obj.id, tur: obj.prev_tur });
 
       await axios
-        .post(`/api/v1/match/tur`, { league_id: obj.id, tur: obj.next_tur })
+        .post(`/user-api/v1/match/tur`, {
+          league_id: obj.id,
+          tur: obj.next_tur,
+        })
         .then((res) => {
           setNextMatches(res?.data.data.matches);
         })
@@ -59,7 +62,10 @@ const User = () => {
         });
 
       await axios
-        .post(`/api/v1/match/tur`, { league_id: obj.id, tur: obj.prev_tur })
+        .post(`/user-api/v1/match/tur`, {
+          league_id: obj.id,
+          tur: obj.prev_tur,
+        })
         .then((res) => {
           setPrevMatches(res?.data.data.matches);
         })
@@ -68,7 +74,7 @@ const User = () => {
         });
 
       await axios
-        .post(`/api/v1/league/top_teams`, {
+        .post(`/user-api/v1/league/top_teams`, {
           league_id: obj.id,
         })
         .then((res) => {
@@ -84,7 +90,7 @@ const User = () => {
   useEffect(() => {
     const getData = async () => {
       const data = await axios.get(
-        `/api/v1/news/latest?limit=8&offset=${lastNewsPag}`
+        `/user-api/v1/news/latest?limit=8&offset=${lastNewsPag}`
       );
       setLastNews([...lastNews, ...data?.data.data.news_list]);
     };
@@ -94,7 +100,7 @@ const User = () => {
   useEffect(() => {
     const getData = async () => {
       const data = await axios.get(
-        `/api/v1/news/?limit=8&offset=${allNewsPag}`
+        `/user-api/v1/news/?limit=8&offset=${allNewsPag}`
       );
       setAllNews([...allNews, ...data.data.data.news_list]);
     };
@@ -103,7 +109,7 @@ const User = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(`/api/v1/news/latest?limit=7&offset=0`);
+      const res = await axios.get(`/user-api/v1/news/latest?limit=7&offset=0`);
       setTopNews(res.data.data.news_list);
     };
     getData();
@@ -111,7 +117,7 @@ const User = () => {
 
   const getTable = async (iid) => {
     await axios
-      .post(`/api/v1/league/top_teams`, {
+      .post(`/user-api/v1/league/top_teams`, {
         league_id: iid,
       })
       .then((res) => {
@@ -124,7 +130,7 @@ const User = () => {
 
   const getNextMatches = async (obj) => {
     await axios
-      .post(`/api/v1/match/tur`, { league_id: obj.id, tur: obj.next_tur })
+      .post(`/user-api/v1/match/tur`, { league_id: obj.id, tur: obj.next_tur })
       .then((res) => {
         setNextMatches(res?.data.data.matches);
       })
@@ -135,7 +141,7 @@ const User = () => {
 
   const getPrevMatches = async (obj) => {
     await axios
-      .post(`/api/v1/match/tur`, { league_id: obj.id, tur: obj.prev_tur })
+      .post(`/user-api/v1/match/tur`, { league_id: obj.id, tur: obj.prev_tur })
       .then((res) => {
         setPrevMatches(res?.data.data.matches);
       })

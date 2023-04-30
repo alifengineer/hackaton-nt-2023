@@ -17,7 +17,7 @@ const NewsPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(`/api/v1/news/${id}`);
+      const res = await axios.get(`/user-api/v1/news/${id}`);
       setInfo(res.data.data.news);
     };
     if (id) {
@@ -27,7 +27,7 @@ const NewsPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await axios.get(`/api/v1/news/?limit=8&offset=0`);
+      const data = await axios.get(`/user-api/v1/news/?limit=8&offset=0`);
       setNews(data.data.data.news_list);
     };
     getData();
@@ -35,7 +35,7 @@ const NewsPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await axios.get(`/api/v1/news/?limit=4&offset=0`, {
+      const data = await axios.get(`/user-api/v1/news/?limit=4&offset=0`, {
         is_importtant: true,
       });
       setMainNews(data.data.data.news_list);
@@ -45,7 +45,7 @@ const NewsPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await axios.get(`/api/v1/news/latest?limit=4&offset=0`);
+      const data = await axios.get(`/user-api/v1/news/latest?limit=4&offset=0`);
       setLastNews(data?.data.data.news_list);
     };
     getData();

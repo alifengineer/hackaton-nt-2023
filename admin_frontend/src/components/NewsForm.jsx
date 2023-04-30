@@ -18,11 +18,15 @@ const NewsForm = () => {
     const formData = new FormData();
     formData.append("file", selectedImage);
     const imgUrl = await simpleAxios
-      .post("https://dilmurodov.jprq.live/api/v1/image/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "https://dilmurodov.jprq.live/admin-api/v1/image/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         return response.data.data.url;
       })
@@ -30,7 +34,7 @@ const NewsForm = () => {
         console.log(error);
       });
     await axios
-      .post(`/api/v1/news/`, {
+      .post(`/admin-api/v1/news/`, {
         title: title,
         content: text,
         image: imgUrl,

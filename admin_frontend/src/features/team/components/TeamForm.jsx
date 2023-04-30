@@ -17,14 +17,14 @@ const TeamForm = () => {
         data: {
           data: { teams },
         },
-      } = await axios.get("api/v1/team/");
+      } = await axios.get("admin-api/v1/team/");
       setTeams(teams);
     };
 
     const getAllLeagues = async () => {
       const {
         data: { data },
-      } = await axios.get("api/v1/league/");
+      } = await axios.get("admin-api/v1/league/");
       setLeagues(data);
     };
 
@@ -36,7 +36,7 @@ const TeamForm = () => {
     const getLeague = async () => {
       const {
         data: { data },
-      } = await axios.get(`api/v1/league/${leagueId}`);
+      } = await axios.get(`admin-api/v1/league/${leagueId}`);
       form.setValue("leagueId", data.id);
       form.setValue("seasonId", data.season.ID);
     };
