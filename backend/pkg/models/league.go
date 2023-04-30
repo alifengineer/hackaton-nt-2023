@@ -42,3 +42,18 @@ type GetLeagueByIDResponse struct {
 	Tur    *Tur    `json:"tur"`
 	Season *Season `json:"season"`
 }
+
+type GetLeagueSeasonTeamsRequest struct {
+	LeagueID string `json:"league_id"`
+	SeasonID string `json:"season_id"`
+}
+
+type GetLeagueSeasonTeamsResponse struct {
+	Teams []*Team `json:"teams"`
+}
+
+type CreateLeagueSeasonTeamsRequest struct {
+	LeagueID string  `json:"league_id"`
+	SeasonID string  `json:"season_id"`
+	Teams    []*Team `json:"teams"`
+}

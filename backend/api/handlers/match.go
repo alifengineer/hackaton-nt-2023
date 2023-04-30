@@ -266,3 +266,66 @@ func (h *Handler) GetAllSeasons(c *gin.Context) {
 
 	h.handleResponse(c, http.OK, resp)
 }
+
+func (h *Handler) GetLeagueSeasonTeams(c *gin.Context) {
+
+	var body models.GetLeagueSeasonTeamsRequest
+
+	leagueID := c.Param("id")
+	if leagueID == "" {
+		h.handleResponse(c, http.BadRequest, "league_id is required")
+		return
+	}
+	body.LeagueID = leagueID
+
+	seasonID := c.Param("season_id")
+	if seasonID == "" {
+		h.handleResponse(c, http.BadRequest, "season_id is required")
+		return
+	}
+	body.SeasonID = seasonID
+
+	resp, err := h.services.MatchService().GetLeagueSeasonTeams(
+		c.Request.Context(),
+		&body,
+	)
+	if err != nil {
+		h.handleResponse(c, http.InternalServerError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http.OK, resp)
+}
+
+func (h *Handler) CreateLeagueSeasonTeams(c *gin.Context) {
+	var body models.CreateLeagueSeasonTeamsRequest
+	if err := c.ShouldBindJSON(&body); err != nil {
+		h.handleResponse(c, http.BadRequest, err.Error())
+		return
+	}
+
+	leagueID := c.Param("id")
+	if leagueID == "" {
+		h.handleResponse(c, http.BadRequest, "league_id is required")
+		return
+	}
+	body.LeagueID = leagueID
+
+	seasonID := c.Param("season_id")
+	if seasonID == "" {
+		h.handleResponse(c, http.BadRequest, "season_id is required")
+		return
+	}
+	body.SeasonID = seasonID
+
+	err := h.services.MatchService().CreateLeagueSeasonTeams(
+		c.Request.Context(),
+		&body,
+	)
+	if err != nil {
+		h.handleResponse(c, http.InternalServerError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http.Created, nil)
+}
