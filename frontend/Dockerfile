@@ -3,6 +3,8 @@ FROM node:14.16.0-alpine3.13 as builder
 
 WORKDIR /web
 
+RUN ls -la
+
 COPY ./package.json ./
 
 # install npm dependencies
