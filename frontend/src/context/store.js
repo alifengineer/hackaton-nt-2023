@@ -6,7 +6,8 @@ const StoreContext = createContext({});
 export const StoreProvider = ({ children }) => {
   const { DARK } = useStatics();
   const [theme, setTheme] = useState(DARK);
-  const [activeNextTour, setActiveNextTour] = useState(1);
+  const [activeNextTour, setActiveNextTour] = useState(0);
+  const [activeTour, setActiveTour] = useState(0);
 
   return (
     <StoreContext.Provider
@@ -15,6 +16,8 @@ export const StoreProvider = ({ children }) => {
         setTheme,
         activeNextTour,
         setActiveNextTour,
+        activeTour,
+        setActiveTour,
       }}
     >
       {children}

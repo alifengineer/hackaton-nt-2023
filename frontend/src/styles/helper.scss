@@ -1,7 +1,59 @@
 .container {
-  width: 88%;
+  width: 90%;
   margin: 0 auto;
 }
 .mt_30 {
   margin-top: 30px;
+}
+.mt_20 {
+  margin-top: 20px;
+}
+.mt_15 {
+  margin-top: 15px;
+}
+.mt_10 {
+  margin-top: 10px;
+}
+.mt_7 {
+  margin-top: 7px;
+}
+.mt_50 {
+  margin-top: 50px;
+}
+.mb_30 {
+  margin-bottom: 30px;
+}
+.mb_20 {
+  margin-bottom: 20px;
+}
+.mb_10 {
+  margin-bottom: 10px;
+}
+.heading {
+  background-color: $color-green;
+  border-radius: 10px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+
+  h2 {
+    color: $color-w;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.view__more {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: $color-gray;
+  font-size: 20px;
+  color: $color-b;
+  font-weight: 700;
 }
