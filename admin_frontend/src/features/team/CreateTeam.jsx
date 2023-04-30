@@ -3,6 +3,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import axios from "../../utils/axios";
 import { Form } from "react-bootstrap";
 import { TeamForm } from "./components";
+import toast from "react-hot-toast";
 
 const CreateTeam = () => {
   const form = useForm();
@@ -16,10 +17,16 @@ const CreateTeam = () => {
       season_id: formData.seasonId,
     };
 
-    await axios.post(
+    const res = await axios.post(
       `/admin-api/v1/league/${formData.leagueId}/seasons/${formData.seasonId}/teams`,
       payload
     );
+    console.log(res);
+    if (res.status === 200 || res.status === 201) {
+      toast.success("Team created");
+    } else {
+      toast.error("System Error");
+    }
   };
 
   return (
