@@ -27,9 +27,9 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	r.Use(customCORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := r.Group("/api")
+	userApi := r.Group("/user-api")
 	{
-		v1 := api.Group("/v1")
+		v1 := userApi.Group("/v1")
 		{
 
 			v1.POST("/image/upload", h.UploadImage)
@@ -49,6 +49,7 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 				// проверка email
 				email.POST("/verify-email/:sms_id/:otp", h.VerifyEmailOtpHandler)
 			}
+
 			liga := v1.Group("/league")
 			{
 				liga.GET("/", h.GetAllLeagues)
@@ -75,6 +76,66 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 			}
 
 			team := v1.Group("/team")
+			{
+				team.GET("/", h.GetAllTeams)
+				team.GET("/:id", h.GetTeamByID)
+			}
+		}
+	}
+
+	adminApi := r.Group("/admin-api")
+	{
+		v1 := adminApi.Group("/v1")
+		{
+
+			email := r.Group("/email")
+			{
+				// отправка email
+				email.POST("/send-otp", h.SendCodeToEmail)
+				// проверка email
+				email.POST("/verify-email/:sms_id/:otp", h.VerifyEmailOtpHandler)
+			}
+			auth := r.Group("/auth")
+			{
+				// авторизация
+				auth.POST("/login", h.LoginHandler)
+				// регистрация
+				auth.POST("/register", h.RegisterHandler)
+			}
+
+			v1.POST("/image/upload", h.UploadImage)
+			// auth
+
+			liga := v1.Group("/league")
+			liga.Use(h.AuthMiddleware)
+			{
+				liga.GET("/", h.GetAllLeagues)
+				liga.POST("/top_teams", h.GetTopTeamsInLeague)
+				liga.GET("/:id", h.GetLeagueByID)
+				liga.GET("/:id/seasons", h.GetAllSeasons)
+				liga.GET("/:id/seasons/:season_id/teams", h.GetLeagueSeasonTeams)
+				liga.POST("/:id/seasons/:season_id/teams", h.CreateLeagueSeasonTeams)
+			}
+			match := v1.Group("/match")
+			match.Use(h.AuthMiddleware)
+			{
+				match.POST("/", h.CreateMatch)
+				match.POST("/tur", h.GetMatchesByTUR)
+				match.GET("/", h.GetAllMatches)
+				match.GET("/:id", h.GetMatchByID)
+			}
+
+			news := v1.Group("/news")
+			news.Use(h.AuthMiddleware)
+			{
+				news.GET("/", h.GetAllNews)
+				news.GET("/:id", h.GetNewsByID)
+				news.POST("/", h.CreateNews)
+				news.GET("/latest", h.GetLatestNews)
+			}
+
+			team := v1.Group("/team")
+			team.Use(h.AuthMiddleware)
 			{
 				team.GET("/", h.GetAllTeams)
 				team.GET("/:id", h.GetTeamByID)
