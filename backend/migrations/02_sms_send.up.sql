@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS "sms_send" (
+    "id" UUID PRIMARY KEY,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "phone_number" VARCHAR(15) NOT NULL,
+    "text" VARCHAR NOT NULL,
+    "otp" VARCHAR(6) NOT NULL,
+    "send_count" SMALLINT DEFAULT 0,
+    "sent_at" TIMESTAMP DEFAULT NULL,
+    "expires_at" TIMESTAMP DEFAULT NULL
+);

@@ -1,0 +1,297 @@
+definitions:
+  api_handlers.Path:
+    properties:
+      filename:
+        type: string
+      url:
+        type: string
+    type: object
+  github.com_dilmurodov_xakaton_nt_api_handlers.Path:
+    properties:
+      filename:
+        type: string
+      url:
+        type: string
+    type: object
+  http.Response:
+    properties:
+      data: {}
+      description:
+        type: string
+      status:
+        type: string
+    type: object
+  models.CreateEmailOtpResponse:
+    properties:
+      sms_id:
+        type: string
+    type: object
+  models.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.RegisterEmailOtp:
+    properties:
+      email:
+        type: string
+    type: object
+  models.RegisterUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      register_type:
+        description: EMAIL,GOOGLE,PHONE
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      guid:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.UserWithAuth:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+info:
+  contact: {}
+  description: This is online banking API
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login User
+      operationId: login_user
+      parameters:
+      - description: Request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserWithAuth'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Login User
+      tags:
+      - User
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      operationId: user_register
+      parameters:
+      - description: Request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserWithAuth'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Register User
+      tags:
+      - User
+  /api/v1/email/send-otp:
+    post:
+      consumes:
+      - application/json
+      description: EmailSendOtp
+      parameters:
+      - description: Request body
+        in: body
+        name: EmailSendOtp
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterEmailOtp'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.CreateEmailOtpResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      tags:
+      - Email
+  /api/v1/email/verify-email/{sms_id}/{otp}:
+    post:
+      consumes:
+      - application/json
+      description: Verify
+      operationId: verify_email
+      parameters:
+      - description: sms_id
+        in: path
+        name: sms_id
+        required: true
+        type: string
+      - description: otp
+        in: path
+        name: otp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Verify
+      tags:
+      - Email
+  /api/v1/image/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_dilmurodov_xakaton_nt_api_handlers.Path'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - file
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
