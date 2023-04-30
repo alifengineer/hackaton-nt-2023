@@ -16,6 +16,7 @@ func (h *Handler) AuthMiddleware(c *gin.Context) {
 	var result models.HasAccessModel
 	if ok := h.hasAccess(c, &result); !ok {
 		c.Abort()
+		h.handleResponse(c, http.Forbidden, "no access")
 		return
 	}
 
